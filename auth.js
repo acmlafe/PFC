@@ -35,24 +35,36 @@ const Auth = {
 
     // Registrar nuevo usuario (solo admins)
     async registrar(email, password, nombre, perfil = 'usuario') {
-        // Usar cliente admin para crear usuario sin cambiar la sesión actual
-        const { data: authData, error: authError } = await dbAdmin.auth.admin.createUser({
+        // Guardar sesión actual
+        const { data: { session: currentSession } } = await db.auth.getSession();
+
+        // Crear nuevo usuario con signUp
+        const { data: authData, error: authError } = await db.auth.signUp({
             email: email,
             password: password,
-            email_confirm: true,
-            user_metadata: {
-                nombre: nombre,
-                perfil: perfil
+            options: {
+                data: {
+                    nombre: nombre,
+                    perfil: perfil
+                }
             }
         });
 
         if (authError) throw authError;
 
+        // Restaurar la sesión del admin
+        if (currentSession) {
+            await db.auth.setSession({
+                access_token: currentSession.access_token,
+                refresh_token: currentSession.refresh_token
+            });
+        }
+
         // Esperar un momento para que el trigger cree el registro
         await new Promise(resolve => setTimeout(resolve, 500));
 
         // Actualizar el perfil con nombre y perfil correctos
-        const { data: userData, error: userError } = await dbAdmin
+        const { data: userData, error: userError } = await db
             .from('usuarios')
             .update({ nombre: nombre, perfil: perfil })
             .eq('id', authData.user.id)
@@ -139,13 +151,25 @@ const Auth = {
     },
 
     // Resetear contraseña de otro usuario (solo admin)
+    // Nota: Esta función requiere enviar email de reset
     async resetearPassword(userId, nuevaPassword) {
-        const { data, error } = await dbAdmin.auth.admin.updateUserById(userId, {
-            password: nuevaPassword
+        // Obtener email del usuario
+        const { data: usuario, error: userError } = await db
+            .from('usuarios')
+            .select('email')
+            .eq('id', userId)
+            .single();
+
+        if (userError) throw userError;
+
+        // Enviar email de reset de contraseña
+        const { error } = await db.auth.resetPasswordForEmail(usuario.email, {
+            redirectTo: window.location.origin + '/login.html'
         });
 
         if (error) throw error;
-        return data;
+
+        return { message: 'Email de restablecimiento enviado' };
     },
 
     // Aplicar permisos en la UI

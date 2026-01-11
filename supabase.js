@@ -1,12 +1,16 @@
 // =============================================
-// CLIENTE SUPABASE - SFLaFe
+// CONFIGURACIÓN Y CLIENTE SUPABASE - SFLaFe
 // =============================================
-// La configuración (URL y ANON_KEY) se carga desde config.js
+// La Publishable Key (sb_...) es segura para frontend
+// NUNCA incluir la Secret Key aquí
 // =============================================
+
+const SUPABASE_URL = 'https://chpvrghxzcqzzzkrduaz.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_6EUqHDNskBgicEOPSnshpQ_5PQnVlkg';
 
 const { createClient } = supabase;
 
-// Cliente principal (usa ANON_KEY - seguro para frontend)
+// Cliente principal (usa Publishable Key - seguro para frontend)
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =============================================
@@ -234,13 +238,33 @@ const Usuarios = {
         return data;
     },
 
-    // Crear usuario
-    async create(usuario) {
+    // Crear usuario (usando signUp estándar)
+    async create(email, password, nombre, perfil = 'usuario') {
+        // Registrar con Supabase Auth
+        const { data: authData, error: authError } = await db.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    nombre: nombre,
+                    perfil: perfil
+                }
+            }
+        });
+
+        if (authError) throw authError;
+
+        // Esperar a que el trigger cree el usuario en la tabla
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Actualizar perfil
         const { data, error } = await db
             .from('usuarios')
-            .insert([usuario])
+            .update({ nombre: nombre, perfil: perfil })
+            .eq('id', authData.user.id)
             .select()
             .single();
+
         if (error) throw error;
         return data;
     },
