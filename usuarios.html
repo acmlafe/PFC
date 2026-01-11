@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios - Sesiones Formativas SFLaFe</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <img src="logoACM.jpg" alt="ACM SF La Fe">
+                <div class="logo-text">
+                    <span>ACM - SF La Fe</span>
+                    <small>PROGRAMA DE FORMACIÓN CONTINUADA</small>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="programacion.html">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Programación</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="repositorio.html">
+                        <i class="fas fa-archive"></i>
+                        <span>Repositorio</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-admin-only>
+                    <a href="usuarios.html" class="active">
+                        <i class="fas fa-users"></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="informes.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Informes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="ayuda.html">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Ayuda</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info-sidebar">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userDisplay">Usuario</span>
+                    <button class="btn-cambiar-password" onclick="abrirModalPassword()" title="Cambiar contraseña">
+                        <i class="fas fa-key"></i>
+                    </button>
+                </div>
+                <button id="logoutBtn" class="logout-btn" onclick="Auth.logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar sesión</span>
+                </button>
+                <div class="sidebar-credits">
+                    Creado por <a href="https://www.linkedin.com/in/emilio-monte-boquet/" target="_blank">EMB-2026</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1>Gestión de Usuarios</h1>
+            </header>
+
+            <div class="page-actions">
+                <button class="btn btn-primary" onclick="abrirModalUsuario()">
+                    <i class="fas fa-plus"></i> Nuevo Usuario
+                </button>
+            </div>
+
+            <!-- Tabla de Usuarios -->
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Perfil</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaUsuarios">
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Nuevo/Editar Usuario -->
+    <div id="modalUsuario" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nuevo Usuario</h2>
+                <button class="modal-close" onclick="cerrarModal('modalUsuario')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formUsuario" onsubmit="guardarUsuario(event)">
+                    <input type="hidden" name="id">
+
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group" id="grupoPassword">
+                        <label>Contraseña *</label>
+                        <input type="password" name="password" class="form-control" minlength="6">
+                        <small style="color: var(--gray-500);">Mínimo 6 caracteres</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Perfil *</label>
+                        <select name="perfil" class="form-control" required>
+                            <option value="usuario">Usuario</option>
+                            <option value="administrador">Administrador</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalUsuario')">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reset Contraseña (Admin) -->
+    <div id="modalResetPassword" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Restablecer Contraseña</h2>
+                <button class="modal-close" onclick="cerrarModalResetPassword()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 16px;">Usuario: <strong id="resetUsuarioNombre"></strong></p>
+                <form id="formResetPassword" onsubmit="resetearPasswordUsuario(event)">
+                    <div class="form-group">
+                        <label>Nueva Contraseña *</label>
+                        <input type="password" id="resetNuevaPassword" class="form-control" required minlength="6">
+                        <small style="color: var(--gray-500);">Mínimo 6 caracteres</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Contraseña *</label>
+                        <input type="password" id="resetConfirmarPassword" class="form-control" required minlength="6">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalResetPassword()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cambiar Contraseña -->
+    <div id="modalCambiarPassword" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cambiar Contraseña</h2>
+                <button class="modal-close" onclick="cerrarModalPassword()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formCambiarPassword" onsubmit="cambiarPassword(event)">
+                    <div class="form-group">
+                        <label>Nueva Contraseña *</label>
+                        <input type="password" id="nuevaPassword" class="form-control" required minlength="6">
+                        <small style="color: var(--gray-500);">Mínimo 6 caracteres</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Contraseña *</label>
+                        <input type="password" id="confirmarPassword" class="form-control" required minlength="6">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalPassword()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Solo admins pueden acceder a esta página
+        document.addEventListener('DOMContentLoaded', async () => {
+            const autorizado = await Auth.protegerPaginaAdmin();
+            if (autorizado) {
+                Auth.aplicarPermisos();
+            }
+        });
+    </script>
+</body>
+</html>

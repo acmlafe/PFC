@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informes - Sesiones Formativas SFLaFe</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <img src="logoACM.jpg" alt="ACM SF La Fe">
+                <div class="logo-text">
+                    <span>ACM - SF La Fe</span>
+                    <small>PROGRAMA DE FORMACIÓN CONTINUADA</small>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="programacion.html">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Programación</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="repositorio.html">
+                        <i class="fas fa-archive"></i>
+                        <span>Repositorio</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-admin-only>
+                    <a href="usuarios.html">
+                        <i class="fas fa-users"></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="informes.html" class="active">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Informes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="ayuda.html">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Ayuda</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info-sidebar">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userDisplay">Usuario</span>
+                    <button class="btn-cambiar-password" onclick="abrirModalPassword()" title="Cambiar contraseña">
+                        <i class="fas fa-key"></i>
+                    </button>
+                </div>
+                <button id="logoutBtn" class="logout-btn" onclick="Auth.logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar sesión</span>
+                </button>
+                <div class="sidebar-credits">
+                    Creado por <a href="https://www.linkedin.com/in/emilio-monte-boquet/" target="_blank">EMB-2026</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1>Informes y Estadísticas</h1>
+            </header>
+
+            <!-- Resumen General -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="infTotal">0</h3>
+                        <p>Total Sesiones</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="infRealizadas">0</h3>
+                        <p>Realizadas</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="infPendientes">0</h3>
+                        <p>Pendientes</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gray">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="infAnuladas">0</h3>
+                        <p>Anuladas</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="infAtrasadas">0</h3>
+                        <p>Atrasadas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficas / Listas -->
+            <div class="charts-grid">
+                <!-- Por Grupo -->
+                <div class="chart-container">
+                    <h3><i class="fas fa-users"></i> Sesiones por Grupo</h3>
+                    <ul class="stat-list" id="listaGrupos">
+                        <li>
+                            <span class="label">Cargando...</span>
+                            <span class="value">-</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Por Ponente -->
+                <div class="chart-container">
+                    <h3><i class="fas fa-user-tie"></i> Sesiones por Ponente</h3>
+                    <ul class="stat-list" id="listaPonentes">
+                        <li>
+                            <span class="label">Cargando...</span>
+                            <span class="value">-</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Indicadores -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h2><i class="fas fa-filter"></i> Indicadores</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Filtros -->
+                    <div class="filters-grid" style="margin-bottom: 24px;">
+                        <div class="form-group mb-0">
+                            <label>Ponente</label>
+                            <input type="text" id="indicadorPonente" class="form-control" placeholder="Nombre...">
+                        </div>
+                        <div class="form-group mb-0">
+                            <label>Grupo</label>
+                            <select id="indicadorGrupo" class="form-control">
+                                <option value="">Todos</option>
+                                <option value="FIR">FIR</option>
+                                <option value="Plantilla">Plantilla</option>
+                                <option value="Rotante externo">Rotante externo</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label>Desde</label>
+                            <input type="date" id="indicadorFechaDesde" class="form-control">
+                        </div>
+                        <div class="form-group mb-0">
+                            <label>Hasta</label>
+                            <input type="date" id="indicadorFechaHasta" class="form-control">
+                        </div>
+                        <div class="form-group mb-0" style="display: flex; gap: 8px; align-items: flex-end;">
+                            <button class="btn btn-primary" onclick="filtrarIndicadores()">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                            <button class="btn btn-secondary" onclick="limpiarFiltrosIndicadores()">
+                                <i class="fas fa-times"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contenido: Tabla y Gráfico -->
+                    <div class="indicadores-grid">
+                        <!-- Tabla de Indicadores -->
+                        <div class="indicadores-tabla">
+                            <h3><i class="fas fa-table"></i> Resumen</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Indicador</th>
+                                        <th style="text-align: right;">Cantidad</th>
+                                        <th style="text-align: right;">Porcentaje</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaIndicadores">
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted">Cargando...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Gráfico de Barras -->
+                        <div class="indicadores-grafico">
+                            <h3><i class="fas fa-chart-bar"></i> Distribución</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="graficoIndicadores"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exportar Datos (Solo Admin) -->
+            <div class="card mt-4" data-admin-only>
+                <div class="card-header">
+                    <h2><i class="fas fa-download"></i> Exportar Datos</h2>
+                </div>
+                <div class="card-body">
+                    <p style="color: var(--gray-500); margin-bottom: 20px;">
+                        Descarga copias de seguridad en formato CSV (compatible con Supabase) o informes en Excel.
+                    </p>
+                    <div class="export-grid">
+                        <!-- CSV Backups -->
+                        <div class="export-card">
+                            <div class="export-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="export-info">
+                                <h4>Backup Sesiones (CSV)</h4>
+                                <p>Formato compatible con Supabase para restauración</p>
+                                <button class="btn btn-secondary btn-sm" onclick="exportarCSVSesiones()">
+                                    <i class="fas fa-download"></i> Descargar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="export-card">
+                            <div class="export-icon">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <div class="export-info">
+                                <h4>Backup Usuarios (CSV)</h4>
+                                <p>Formato compatible con Supabase para restauración</p>
+                                <button class="btn btn-secondary btn-sm" onclick="exportarCSVUsuarios()">
+                                    <i class="fas fa-download"></i> Descargar
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Excel -->
+                        <div class="export-card">
+                            <div class="export-icon excel">
+                                <i class="fas fa-file-excel"></i>
+                            </div>
+                            <div class="export-info">
+                                <h4>Informe Sesiones (Excel)</h4>
+                                <p>Listado completo con toda la información</p>
+                                <button class="btn btn-success btn-sm" onclick="exportarExcelSesiones()">
+                                    <i class="fas fa-download"></i> Descargar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Cambiar Contraseña -->
+    <div id="modalCambiarPassword" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cambiar Contraseña</h2>
+                <button class="modal-close" onclick="cerrarModalPassword()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formCambiarPassword" onsubmit="cambiarPassword(event)">
+                    <div class="form-group">
+                        <label>Nueva Contraseña *</label>
+                        <input type="password" id="nuevaPassword" class="form-control" required minlength="6">
+                        <small style="color: var(--gray-500);">Mínimo 6 caracteres</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Contraseña *</label>
+                        <input type="password" id="confirmarPassword" class="form-control" required minlength="6">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalPassword()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="config.js"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Variable global para el gráfico
+        let graficoIndicadores = null;
+
+        // Verificar sesión al cargar
+        document.addEventListener('DOMContentLoaded', async () => {
+            const autenticado = await Auth.protegerPagina();
+            if (autenticado) {
+                Auth.aplicarPermisos();
+                // Cargar indicadores sin filtros al inicio
+                cargarIndicadores();
+            }
+        });
+
+        // Cargar indicadores con o sin filtros
+        async function cargarIndicadores(filtros = {}) {
+            try {
+                // Obtener sesiones (filtradas o todas)
+                let sesiones;
+                if (Object.keys(filtros).length > 0) {
+                    sesiones = await Sesiones.filtrar(filtros);
+                } else {
+                    sesiones = await Sesiones.getAll();
+                }
+
+                const hoy = new Date().toISOString().split('T')[0];
+
+                // Calcular indicadores
+                const total = sesiones.length;
+                const realizadas = sesiones.filter(s => s.estado === 'realizada').length;
+                const pendientes = sesiones.filter(s => s.estado === 'pendiente' || s.estado === 'fecha confirmada').length;
+                const anuladas = sesiones.filter(s => s.estado === 'anulada').length;
+                const atrasadas = sesiones.filter(s =>
+                    s.estado === 'pendiente' && s.fecha_prevista && s.fecha_prevista < hoy
+                ).length;
+
+                // Actualizar tabla
+                actualizarTablaIndicadores(total, realizadas, pendientes, anuladas, atrasadas);
+
+                // Actualizar gráfico
+                actualizarGraficoIndicadores(realizadas, pendientes, anuladas, atrasadas);
+
+            } catch (error) {
+                mostrarNotificacion('Error al cargar indicadores: ' + error.message, 'error');
+            }
+        }
+
+        // Actualizar tabla de indicadores
+        function actualizarTablaIndicadores(total, realizadas, pendientes, anuladas, atrasadas) {
+            const tbody = document.getElementById('tablaIndicadores');
+
+            const calcPorcentaje = (valor) => total > 0 ? ((valor / total) * 100).toFixed(1) : '0.0';
+
+            tbody.innerHTML = `
+                <tr>
+                    <td><i class="fas fa-calendar" style="color: var(--primary); margin-right: 8px;"></i> Total programadas</td>
+                    <td style="text-align: right; font-weight: 600;">${total}</td>
+                    <td style="text-align: right;">100%</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-check-circle" style="color: var(--success); margin-right: 8px;"></i> Realizadas</td>
+                    <td style="text-align: right; font-weight: 600;">${realizadas}</td>
+                    <td style="text-align: right;">${calcPorcentaje(realizadas)}%</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-clock" style="color: var(--warning); margin-right: 8px;"></i> Pendientes</td>
+                    <td style="text-align: right; font-weight: 600;">${pendientes}</td>
+                    <td style="text-align: right;">${calcPorcentaje(pendientes)}%</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-times-circle" style="color: var(--gray-500); margin-right: 8px;"></i> Anuladas</td>
+                    <td style="text-align: right; font-weight: 600;">${anuladas}</td>
+                    <td style="text-align: right;">${calcPorcentaje(anuladas)}%</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-exclamation-triangle" style="color: var(--danger); margin-right: 8px;"></i> Atrasadas</td>
+                    <td style="text-align: right; font-weight: 600;">${atrasadas}</td>
+                    <td style="text-align: right;">${calcPorcentaje(atrasadas)}%</td>
+                </tr>
+            `;
+        }
+
+        // Actualizar gráfico de barras
+        function actualizarGraficoIndicadores(realizadas, pendientes, anuladas, atrasadas) {
+            const ctx = document.getElementById('graficoIndicadores').getContext('2d');
+
+            // Destruir gráfico anterior si existe
+            if (graficoIndicadores) {
+                graficoIndicadores.destroy();
+            }
+
+            graficoIndicadores = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Realizadas', 'Pendientes', 'Anuladas', 'Atrasadas'],
+                    datasets: [{
+                        label: 'Sesiones',
+                        data: [realizadas, pendientes, anuladas, atrasadas],
+                        backgroundColor: [
+                            '#10b981', // verde - realizadas
+                            '#f59e0b', // amarillo - pendientes
+                            '#6b7280', // gris - anuladas
+                            '#ef4444'  // rojo - atrasadas
+                        ],
+                        borderColor: [
+                            '#059669',
+                            '#d97706',
+                            '#4b5563',
+                            '#dc2626'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + ' sesiones';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            },
+                            grid: {
+                                color: '#e5e7eb'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Filtrar indicadores
+        function filtrarIndicadores() {
+            const filtros = {
+                ponente: document.getElementById('indicadorPonente')?.value,
+                grupo: document.getElementById('indicadorGrupo')?.value,
+                fecha_desde: document.getElementById('indicadorFechaDesde')?.value,
+                fecha_hasta: document.getElementById('indicadorFechaHasta')?.value
+            };
+
+            // Limpiar filtros vacíos
+            Object.keys(filtros).forEach(k => {
+                if (!filtros[k]) delete filtros[k];
+            });
+
+            cargarIndicadores(filtros);
+        }
+
+        // Limpiar filtros de indicadores
+        function limpiarFiltrosIndicadores() {
+            document.getElementById('indicadorPonente').value = '';
+            document.getElementById('indicadorGrupo').value = '';
+            document.getElementById('indicadorFechaDesde').value = '';
+            document.getElementById('indicadorFechaHasta').value = '';
+            cargarIndicadores();
+        }
+
+        // =============================================
+        // FUNCIONES DE EXPORTACIÓN
+        // =============================================
+
+        // Exportar CSV de Sesiones (formato Supabase)
+        async function exportarCSVSesiones() {
+            try {
+                const sesiones = await Sesiones.getAll();
+
+                if (sesiones.length === 0) {
+                    mostrarNotificacion('No hay sesiones para exportar', 'warning');
+                    return;
+                }
+
+                // Cabeceras según estructura de Supabase
+                const cabeceras = ['id', 'created_at', 'titulo', 'fecha_prevista', 'hora', 'ponente', 'grupo', 'estado', 'fecha_exposicion', 'palabras_clave', 'url_acceso', 'observaciones'];
+
+                // Generar filas CSV
+                const filas = sesiones.map(s => {
+                    return cabeceras.map(col => {
+                        let valor = s[col];
+                        if (valor === null || valor === undefined) return '';
+                        // Escapar comillas y envolver en comillas si contiene comas o saltos de línea
+                        valor = String(valor).replace(/"/g, '""');
+                        if (valor.includes(',') || valor.includes('\n') || valor.includes('"')) {
+                            valor = `"${valor}"`;
+                        }
+                        return valor;
+                    }).join(',');
+                });
+
+                const csv = [cabeceras.join(','), ...filas].join('\n');
+                descargarArchivo(csv, `backup_sesiones_${obtenerFechaArchivo()}.csv`, 'text/csv');
+                mostrarNotificacion('Backup de sesiones descargado', 'success');
+            } catch (error) {
+                mostrarNotificacion('Error al exportar: ' + error.message, 'error');
+            }
+        }
+
+        // Exportar CSV de Usuarios (formato Supabase)
+        async function exportarCSVUsuarios() {
+            try {
+                const usuarios = await Usuarios.getAll();
+
+                if (usuarios.length === 0) {
+                    mostrarNotificacion('No hay usuarios para exportar', 'warning');
+                    return;
+                }
+
+                // Cabeceras según estructura de Supabase
+                const cabeceras = ['id', 'created_at', 'email', 'nombre', 'perfil'];
+
+                // Generar filas CSV
+                const filas = usuarios.map(u => {
+                    return cabeceras.map(col => {
+                        let valor = u[col];
+                        if (valor === null || valor === undefined) return '';
+                        valor = String(valor).replace(/"/g, '""');
+                        if (valor.includes(',') || valor.includes('\n') || valor.includes('"')) {
+                            valor = `"${valor}"`;
+                        }
+                        return valor;
+                    }).join(',');
+                });
+
+                const csv = [cabeceras.join(','), ...filas].join('\n');
+                descargarArchivo(csv, `backup_usuarios_${obtenerFechaArchivo()}.csv`, 'text/csv');
+                mostrarNotificacion('Backup de usuarios descargado', 'success');
+            } catch (error) {
+                mostrarNotificacion('Error al exportar: ' + error.message, 'error');
+            }
+        }
+
+        // Exportar Excel de Sesiones
+        async function exportarExcelSesiones() {
+            try {
+                const sesiones = await Sesiones.getAll();
+
+                if (sesiones.length === 0) {
+                    mostrarNotificacion('No hay sesiones para exportar', 'warning');
+                    return;
+                }
+
+                // Preparar datos con nombres legibles
+                const datos = sesiones.map(s => ({
+                    'Título': s.titulo || '',
+                    'Fecha Prevista': s.fecha_prevista ? formatearFecha(s.fecha_prevista) : '',
+                    'Hora': s.hora ? formatearHora(s.hora) : '',
+                    'Ponente': s.ponente || '',
+                    'Grupo': s.grupo || '',
+                    'Estado': s.estado || '',
+                    'Fecha Exposición': s.fecha_exposicion ? formatearFecha(s.fecha_exposicion) : '',
+                    'Palabras Clave': s.palabras_clave || '',
+                    'URL Acceso': s.url_acceso || '',
+                    'Observaciones': s.observaciones || '',
+                    'Fecha Creación': s.created_at ? new Date(s.created_at).toLocaleString('es-ES') : ''
+                }));
+
+                // Crear libro de Excel
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.json_to_sheet(datos);
+
+                // Ajustar anchos de columna
+                ws['!cols'] = [
+                    { wch: 40 }, // Título
+                    { wch: 12 }, // Fecha Prevista
+                    { wch: 8 },  // Hora
+                    { wch: 25 }, // Ponente
+                    { wch: 15 }, // Grupo
+                    { wch: 15 }, // Estado
+                    { wch: 14 }, // Fecha Exposición
+                    { wch: 30 }, // Palabras Clave
+                    { wch: 40 }, // URL
+                    { wch: 40 }, // Observaciones
+                    { wch: 18 }  // Fecha Creación
+                ];
+
+                XLSX.utils.book_append_sheet(wb, ws, 'Sesiones');
+
+                // Descargar
+                XLSX.writeFile(wb, `informe_sesiones_${obtenerFechaArchivo()}.xlsx`);
+                mostrarNotificacion('Informe Excel descargado', 'success');
+            } catch (error) {
+                mostrarNotificacion('Error al exportar: ' + error.message, 'error');
+            }
+        }
+
+        // Utilidad: Obtener fecha para nombre de archivo
+        function obtenerFechaArchivo() {
+            const hoy = new Date();
+            return hoy.toISOString().split('T')[0].replace(/-/g, '');
+        }
+
+        // Utilidad: Descargar archivo
+        function descargarArchivo(contenido, nombreArchivo, tipoMime) {
+            const blob = new Blob([contenido], { type: tipoMime + ';charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = nombreArchivo;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+    </script>
+</body>
+</html>
