@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Usuario - ACM SF La Fe</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .manual-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .manual-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .manual-section h2 {
+            color: var(--primary);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .manual-section h2 i {
+            font-size: 24px;
+        }
+
+        .manual-section h3 {
+            color: var(--gray-700);
+            margin: 20px 0 12px;
+            font-size: 16px;
+        }
+
+        .manual-section p {
+            color: var(--gray-600);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .manual-section ul, .manual-section ol {
+            color: var(--gray-600);
+            line-height: 1.8;
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .manual-section li {
+            margin-bottom: 8px;
+        }
+
+        .tip-box {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 16px 0;
+        }
+
+        .tip-box strong {
+            color: var(--primary);
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            padding: 16px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 16px 0;
+        }
+
+        .warning-box strong {
+            color: #b45309;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .feature-item {
+            background: var(--gray-50);
+            padding: 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+        }
+
+        .feature-item h4 {
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-item h4 i {
+            color: var(--primary);
+        }
+
+        .feature-item p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .color-legend {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin: 12px 0;
+        }
+
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .color-box.green { background: var(--success); }
+        .color-box.red { background: var(--danger); }
+        .color-box.blue { background: var(--primary); }
+
+        .toc {
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: var(--gray-700);
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc li {
+            margin: 8px 0;
+        }
+
+        .toc a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .keyboard-shortcut {
+            background: var(--gray-100);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            border: 1px solid var(--gray-300);
+        }
+
+        .author-credit {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+            text-align: center;
+            color: var(--gray-600);
+        }
+
+        .author-credit a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .author-credit a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <img src="logoACM.jpg" alt="ACM SF La Fe">
+                <div class="logo-text">
+                    <span>ACM - SF La Fe</span>
+                    <small>PROGRAMA DE FORMACIÓN CONTINUADA</small>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="programacion.html">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Programación</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="repositorio.html">
+                        <i class="fas fa-archive"></i>
+                        <span>Repositorio</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-admin-only>
+                    <a href="usuarios.html">
+                        <i class="fas fa-users"></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="informes.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Informes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="ayuda.html" class="active">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Ayuda</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info-sidebar">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userDisplay">Usuario</span>
+                    <button class="btn-cambiar-password" onclick="abrirModalPassword()" title="Cambiar contraseña">
+                        <i class="fas fa-key"></i>
+                    </button>
+                </div>
+                <button id="logoutBtn" class="logout-btn" onclick="Auth.logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar sesión</span>
+                </button>
+                <div class="sidebar-credits">
+                    Creado por <a href="https://www.linkedin.com/in/emilio-monte-boquet/" target="_blank">EMB-2026</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1><i class="fas fa-book"></i> Manual de Usuario</h1>
+            </header>
+
+            <div class="manual-content">
+                <!-- Índice -->
+                <div class="toc">
+                    <h3><i class="fas fa-list"></i> Contenido</h3>
+                    <ul>
+                        <li><a href="#introduccion">1. Introducción</a></li>
+                        <li><a href="#acceso">2. Acceso al Sistema</a></li>
+                        <li><a href="#dashboard">3. Dashboard (Panel de Control)</a></li>
+                        <li><a href="#programacion">4. Programación de Sesiones</a></li>
+                        <li><a href="#repositorio">5. Repositorio</a></li>
+                        <li><a href="#informes">6. Informes y Estadísticas</a></li>
+                        <li><a href="#usuarios">7. Gestión de Usuarios (Admin)</a></li>
+                        <li><a href="#sesiones">8. Editar y Eliminar Sesiones</a></li>
+                        <li><a href="#password">9. Cambiar Contraseña</a></li>
+                    </ul>
+                </div>
+
+                <!-- Introducción -->
+                <section id="introduccion" class="manual-section">
+                    <h2><i class="fas fa-info-circle"></i> 1. Introducción</h2>
+                    <p>Bienvenido al sistema de gestión de <strong>Sesiones Formativas de la ACM del Servicio de Farmacia del Hospital Universitari i Politècnic La Fe</strong>.</p>
+                    <p>Esta aplicación permite gestionar las sesiones de formación continuada del servicio, incluyendo la programación, seguimiento y archivo de todas las sesiones formativas.</p>
+
+                    <h3>Funcionalidades principales</h3>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h4><i class="fas fa-calendar-alt"></i> Programación</h4>
+                            <p>Visualiza y gestiona las sesiones programadas en formato calendario o tabla.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4><i class="fas fa-archive"></i> Repositorio</h4>
+                            <p>Consulta el histórico de sesiones ya realizadas.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4><i class="fas fa-chart-bar"></i> Informes</h4>
+                            <p>Accede a estadísticas y métricas sobre las sesiones.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4><i class="fas fa-users"></i> Usuarios</h4>
+                            <p>Gestión de usuarios del sistema (solo administradores).</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Acceso -->
+                <section id="acceso" class="manual-section">
+                    <h2><i class="fas fa-sign-in-alt"></i> 2. Acceso al Sistema</h2>
+                    <p>Para acceder al sistema necesitas un usuario y contraseña proporcionados por el administrador.</p>
+
+                    <h3>Pasos para iniciar sesión</h3>
+                    <ol>
+                        <li>Accede a la página de inicio de sesión</li>
+                        <li>Introduce tu <strong>correo electrónico</strong></li>
+                        <li>Introduce tu <strong>contraseña</strong></li>
+                        <li>Haz clic en <strong>"Iniciar Sesión"</strong></li>
+                    </ol>
+
+                    <div class="tip-box">
+                        <strong><i class="fas fa-lightbulb"></i> Consejo:</strong> Si olvidaste tu contraseña, contacta con el administrador del sistema para que te la restablezca.
+                    </div>
+
+                    <h3>Tipos de usuario</h3>
+                    <ul>
+                        <li><strong>Usuario:</strong> Puede ver y editar sesiones, pero no puede crear nuevas ni gestionar usuarios.</li>
+                        <li><strong>Administrador:</strong> Acceso completo a todas las funcionalidades, incluyendo crear sesiones y gestionar usuarios.</li>
+                    </ul>
+                </section>
+
+                <!-- Dashboard -->
+                <section id="dashboard" class="manual-section">
+                    <h2><i class="fas fa-home"></i> 3. Dashboard (Panel de Control)</h2>
+                    <p>El Dashboard es la pantalla principal que se muestra al iniciar sesión. Proporciona una visión general del estado de las sesiones formativas.</p>
+
+                    <h3>Elementos del Dashboard</h3>
+                    <ul>
+                        <li><strong>Tarjetas de estadísticas:</strong> Muestran el número total de sesiones, pendientes, realizadas y atrasadas.</li>
+                        <li><strong>Próximas sesiones:</strong> Lista de las sesiones programadas más cercanas en el tiempo.</li>
+                    </ul>
+
+                    <h3>Código de colores en fechas</h3>
+                    <div class="color-legend">
+                        <div class="color-item">
+                            <div class="color-box green"></div>
+                            <span>Fecha exposición = Fecha prevista</span>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-box red"></div>
+                            <span>Fecha exposición diferente a prevista</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Programación -->
+                <section id="programacion" class="manual-section">
+                    <h2><i class="fas fa-calendar-alt"></i> 4. Programación de Sesiones</h2>
+                    <p>La sección de Programación muestra todas las sesiones que están pendientes o con fecha confirmada (no incluye las ya realizadas).</p>
+
+                    <h3>Vistas disponibles</h3>
+                    <p>Puedes alternar entre dos vistas usando los botones en la parte superior:</p>
+                    <ul>
+                        <li><strong><i class="fas fa-calendar-alt"></i> Calendario:</strong> Vista mensual donde cada día muestra las sesiones programadas con el nombre del ponente.</li>
+                        <li><strong><i class="fas fa-list"></i> Tabla:</strong> Vista en formato tabla con todos los detalles de las sesiones.</li>
+                    </ul>
+
+                    <h3>Vista Calendario</h3>
+                    <ul>
+                        <li>Usa las flechas <strong>&lt;</strong> y <strong>&gt;</strong> para navegar entre meses.</li>
+                        <li>El día actual aparece resaltado con un borde azul.</li>
+                        <li>Haz clic en el nombre del ponente para ver los detalles de la sesión.</li>
+                    </ul>
+
+                    <div class="color-legend">
+                        <div class="color-item">
+                            <div class="color-box green"></div>
+                            <span>Sesión en fecha (exposición = prevista)</span>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-box red"></div>
+                            <span>Sesión reprogramada (fechas diferentes)</span>
+                        </div>
+                    </div>
+
+                    <h3>Crear nueva sesión (Solo administradores)</h3>
+                    <ol>
+                        <li>Haz clic en el botón <strong>"+ Nueva Sesión"</strong></li>
+                        <li>Completa el formulario con los datos de la sesión</li>
+                        <li>Los campos obligatorios son: Título y Ponente</li>
+                        <li>Haz clic en <strong>"Guardar"</strong></li>
+                    </ol>
+
+                    <div class="tip-box">
+                        <strong><i class="fas fa-lightbulb"></i> Consejo:</strong> Al introducir la fecha prevista, automáticamente se copia a la fecha de exposición. Puedes modificarla si es diferente.
+                    </div>
+                </section>
+
+                <!-- Repositorio -->
+                <section id="repositorio" class="manual-section">
+                    <h2><i class="fas fa-archive"></i> 5. Repositorio</h2>
+                    <p>El Repositorio contiene el histórico de todas las sesiones que ya han sido <strong>realizadas</strong>.</p>
+
+                    <h3>Funcionalidades</h3>
+                    <ul>
+                        <li><strong>Buscar sesiones:</strong> Usa los filtros disponibles para encontrar sesiones por título, ponente, grupo, palabras clave o rango de fechas.</li>
+                        <li><strong>Ver detalles:</strong> Haz clic en el título de una sesión para ver toda su información.</li>
+                        <li><strong>Editar:</strong> Puedes modificar los datos de cualquier sesión.</li>
+                    </ul>
+
+                    <h3>Filtros disponibles</h3>
+                    <ul>
+                        <li>Título</li>
+                        <li>Ponente</li>
+                        <li>Grupo (FIR, Plantilla, Rotante externo, Otros)</li>
+                        <li>Palabras clave</li>
+                        <li>Rango de fechas</li>
+                    </ul>
+                </section>
+
+                <!-- Informes -->
+                <section id="informes" class="manual-section">
+                    <h2><i class="fas fa-chart-bar"></i> 6. Informes y Estadísticas</h2>
+                    <p>La sección de Informes proporciona métricas y estadísticas sobre las sesiones formativas.</p>
+
+                    <h3>Datos disponibles</h3>
+                    <ul>
+                        <li><strong>Resumen general:</strong> Total de sesiones, realizadas, pendientes, anuladas y atrasadas.</li>
+                        <li><strong>Por grupo:</strong> Número de sesiones por cada grupo (FIR, Plantilla, Rotante externo, Otros).</li>
+                        <li><strong>Por ponente:</strong> Ranking de ponentes según número de sesiones.</li>
+                    </ul>
+
+                    <h3>Exportar datos</h3>
+                    <p>Puedes exportar los datos en diferentes formatos:</p>
+                    <ul>
+                        <li><strong>Excel:</strong> Archivo .xlsx con todos los datos</li>
+                        <li><strong>CSV:</strong> Archivo de texto separado por comas</li>
+                    </ul>
+                </section>
+
+                <!-- Usuarios -->
+                <section id="usuarios" class="manual-section">
+                    <h2><i class="fas fa-users"></i> 7. Gestión de Usuarios (Solo Administradores)</h2>
+                    <p>Esta sección solo está disponible para usuarios con perfil de <strong>Administrador</strong>.</p>
+
+                    <h3>Crear nuevo usuario</h3>
+                    <ol>
+                        <li>Haz clic en <strong>"+ Nuevo Usuario"</strong></li>
+                        <li>Introduce el nombre, correo electrónico y contraseña</li>
+                        <li>Selecciona el perfil: Usuario o Administrador</li>
+                        <li>Haz clic en <strong>"Guardar"</strong></li>
+                    </ol>
+
+                    <h3>Restablecer contraseña de un usuario</h3>
+                    <ol>
+                        <li>Busca el usuario en la tabla</li>
+                        <li>Haz clic en el icono de llave <i class="fas fa-key"></i></li>
+                        <li>Introduce la nueva contraseña</li>
+                        <li>Confirma la contraseña</li>
+                        <li>Haz clic en <strong>"Restablecer"</strong></li>
+                    </ol>
+
+                    <div class="warning-box">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Atención:</strong> Al eliminar un usuario, se eliminará permanentemente del sistema. Esta acción no se puede deshacer.
+                    </div>
+                </section>
+
+                <!-- Editar y Eliminar Sesiones -->
+                <section id="sesiones" class="manual-section">
+                    <h2><i class="fas fa-edit"></i> 8. Editar y Eliminar Sesiones</h2>
+
+                    <h3>Editar una sesión</h3>
+                    <p>Existen varias formas de editar una sesión:</p>
+                    <ul>
+                        <li>Desde la <strong>tabla de Programación</strong>: Haz clic en el icono de editar <i class="fas fa-edit"></i></li>
+                        <li>Desde el <strong>detalle de la sesión</strong>: Haz clic en el botón "Editar"</li>
+                    </ul>
+
+                    <h3>Eliminar una sesión</h3>
+                    <ol>
+                        <li>Abre el formulario de edición de la sesión</li>
+                        <li>Haz clic en el botón rojo <strong>"Eliminar"</strong> en la esquina inferior izquierda</li>
+                        <li>Confirma la eliminación en el diálogo que aparece</li>
+                    </ol>
+
+                    <div class="warning-box">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Atención:</strong> La eliminación de sesiones es permanente y no se puede deshacer. Asegúrate antes de confirmar.
+                    </div>
+
+                    <h3>Cambiar estado de una sesión</h3>
+                    <p>Los estados disponibles son:</p>
+                    <ul>
+                        <li><strong>Pendiente:</strong> Sesión programada sin fecha definitiva</li>
+                        <li><strong>Fecha confirmada:</strong> Sesión con fecha definitiva</li>
+                        <li><strong>Realizada:</strong> Sesión ya impartida (pasa al Repositorio)</li>
+                        <li><strong>Anulada:</strong> Sesión cancelada</li>
+                    </ul>
+                </section>
+
+                <!-- Cambiar Contraseña -->
+                <section id="password" class="manual-section">
+                    <h2><i class="fas fa-key"></i> 9. Cambiar Contraseña</h2>
+                    <p>Puedes cambiar tu contraseña en cualquier momento.</p>
+
+                    <h3>Pasos</h3>
+                    <ol>
+                        <li>Haz clic en el icono de llave <i class="fas fa-key"></i> junto a tu nombre de usuario en el menú lateral</li>
+                        <li>Introduce tu nueva contraseña (mínimo 6 caracteres)</li>
+                        <li>Confirma la nueva contraseña</li>
+                        <li>Haz clic en <strong>"Guardar"</strong></li>
+                    </ol>
+
+                    <div class="tip-box">
+                        <strong><i class="fas fa-lightbulb"></i> Consejo:</strong> Usa una contraseña segura que combine letras, números y símbolos.
+                    </div>
+                </section>
+
+                <!-- Soporte -->
+                <section class="manual-section">
+                    <h2><i class="fas fa-headset"></i> Soporte</h2>
+                    <p>Si tienes alguna duda o problema con el sistema, contacta con el administrador del sistema o con el responsable de formación del servicio.</p>
+
+                    <div class="tip-box">
+                        <strong>Versión:</strong> 1.0 | <strong>Última actualización:</strong> Enero 2026
+                    </div>
+
+                    <div class="author-credit">
+                        <p>Aplicación desarrollada por <a href="https://www.linkedin.com/in/emilio-monte-boquet/" target="_blank"><i class="fab fa-linkedin"></i> Emilio Monte Boquet</a></p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Cambiar Contraseña -->
+    <div id="modalCambiarPassword" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cambiar Contraseña</h2>
+                <button class="modal-close" onclick="cerrarModalPassword()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="formCambiarPassword" onsubmit="cambiarPassword(event)">
+                    <div class="form-group">
+                        <label>Nueva Contraseña *</label>
+                        <input type="password" id="nuevaPassword" class="form-control" required minlength="6">
+                        <small style="color: var(--gray-500);">Mínimo 6 caracteres</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Contraseña *</label>
+                        <input type="password" id="confirmarPassword" class="form-control" required minlength="6">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalPassword()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const autenticado = await Auth.protegerPagina();
+            if (autenticado) {
+                Auth.aplicarPermisos();
+            }
+        });
+    </script>
+</body>
+</html>
