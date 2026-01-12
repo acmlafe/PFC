@@ -24,12 +24,25 @@ const Auth = {
 
     // Cerrar sesión
     async logout() {
-        const { error } = await db.auth.signOut();
-        if (error) throw error;
+        try {
+            // Cerrar sesión en Supabase
+            await db.auth.signOut({ scope: 'global' });
+        } catch (error) {
+            console.error('Error en signOut:', error);
+        }
 
+        // Limpiar estado local
         this.usuario = null;
         this.perfil = null;
 
+        // Limpiar localStorage de Supabase manualmente
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('sb-')) {
+                localStorage.removeItem(key);
+            }
+        });
+
+        // Redirigir a login
         window.location.href = 'login.html';
     },
 
@@ -244,8 +257,11 @@ async function iniciarSesion(event) {
 
 // Verificar si ya hay sesión al cargar login
 async function verificarSesionEnLogin() {
-    const haySession = await Auth.verificarSesion();
-    if (haySession) {
+    // Pequeña espera para asegurar que el logout se haya completado
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const { data: { session } } = await db.auth.getSession();
+    if (session) {
         window.location.href = 'index.html';
     }
 }
