@@ -38,6 +38,12 @@
                     </a>
                 </li>
                 <li class="nav-item" data-admin-only>
+                    <a href="maestro.html">
+                        <i class="fas fa-database"></i>
+                        <span>Maestro de sesiones</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-admin-only>
                     <a href="usuarios.html">
                         <i class="fas fa-users"></i>
                         <span>Usuarios</span>
@@ -133,7 +139,7 @@
             <div class="charts-grid">
                 <!-- Por Grupo -->
                 <div class="chart-container">
-                    <h3><i class="fas fa-users"></i> Sesiones por Grupo</h3>
+                    <h3><i class="fas fa-users"></i> Sesiones realizadas por Grupo</h3>
                     <ul class="stat-list" id="listaGrupos">
                         <li>
                             <span class="label">Cargando...</span>
@@ -142,10 +148,35 @@
                     </ul>
                 </div>
 
-                <!-- Por Ponente -->
+                <!-- TOP-10 Global -->
                 <div class="chart-container">
-                    <h3><i class="fas fa-user-tie"></i> Sesiones por Ponente</h3>
+                    <h3><i class="fas fa-trophy"></i> TOP-10 Ponentes - Sesiones realizadas (Global)</h3>
                     <ul class="stat-list" id="listaPonentes">
+                        <li>
+                            <span class="label">Cargando...</span>
+                            <span class="value">-</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- TOP-10 por Grupo -->
+            <div class="charts-grid">
+                <!-- TOP-10 Plantilla -->
+                <div class="chart-container">
+                    <h3><i class="fas fa-medal"></i> TOP-10 Ponentes - Sesiones realizadas (Plantilla)</h3>
+                    <ul class="stat-list" id="listaTopPlantilla">
+                        <li>
+                            <span class="label">Cargando...</span>
+                            <span class="value">-</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- TOP-10 FIR -->
+                <div class="chart-container">
+                    <h3><i class="fas fa-medal"></i> TOP-10 Ponentes - Sesiones realizadas (FIR)</h3>
+                    <ul class="stat-list" id="listaTopFIR">
                         <li>
                             <span class="label">Cargando...</span>
                             <span class="value">-</span>

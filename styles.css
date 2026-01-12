@@ -197,6 +197,7 @@ body {
 /* Header */
 .header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
@@ -206,6 +207,13 @@ body {
     font-size: 28px;
     font-weight: 600;
     color: var(--gray-900);
+}
+
+.header-subtitle {
+    width: 100%;
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-top: 4px;
 }
 
 /* =============================================
@@ -253,6 +261,17 @@ body {
     align-items: center;
     gap: 16px;
     box-shadow: var(--shadow);
+}
+
+.stat-card-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 .stat-icon {
@@ -320,6 +339,7 @@ body {
     border-radius: 20px;
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .badge-pending { background: #fef3c7; color: #92400e; }

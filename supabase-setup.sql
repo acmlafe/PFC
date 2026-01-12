@@ -23,7 +23,7 @@ CREATE TABLE sesiones (
     fecha_prevista DATE,
     hora TIME,
     ponente TEXT NOT NULL,
-    grupo TEXT CHECK (grupo IN ('FIR', 'Plantilla', 'Rotante externo')),
+    grupo TEXT CHECK (grupo IN ('FIR', 'Plantilla', 'Rotante externo', 'Otros')),
     estado TEXT DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'fecha confirmada', 'realizada', 'anulada')),
     fecha_exposicion DATE,
     palabras_clave TEXT,

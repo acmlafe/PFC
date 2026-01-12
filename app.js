@@ -621,6 +621,7 @@ async function cargarInformes() {
     try {
         const stats = await Sesiones.getEstadisticas();
         const atrasadas = await Sesiones.getAtrasadas();
+        const sesionesRealizadas = await Sesiones.getRealizadas();
 
         // Resumen general
         document.getElementById('infTotal').textContent = stats.total;
@@ -629,10 +630,16 @@ async function cargarInformes() {
         document.getElementById('infAnuladas').textContent = stats.anuladas;
         document.getElementById('infAtrasadas').textContent = atrasadas.length;
 
-        // Por grupo
+        // Por grupo (solo sesiones realizadas)
         const listaGrupos = document.getElementById('listaGrupos');
         if (listaGrupos) {
-            listaGrupos.innerHTML = Object.entries(stats.porGrupo)
+            const porGrupoRealizadas = {
+                FIR: sesionesRealizadas.filter(s => s.grupo === 'FIR').length,
+                Plantilla: sesionesRealizadas.filter(s => s.grupo === 'Plantilla').length,
+                'Rotante externo': sesionesRealizadas.filter(s => s.grupo === 'Rotante externo').length,
+                Otros: sesionesRealizadas.filter(s => s.grupo === 'Otros').length
+            };
+            listaGrupos.innerHTML = Object.entries(porGrupoRealizadas)
                 .map(([grupo, count]) => `
                     <li>
                         <span class="label">${grupo}</span>
@@ -641,18 +648,75 @@ async function cargarInformes() {
                 `).join('');
         }
 
-        // Por ponente
+        // TOP-10 Global (solo sesiones realizadas)
         const listaPonentes = document.getElementById('listaPonentes');
         if (listaPonentes) {
-            const ponentes = Object.entries(stats.porPonente)
-                .sort((a, b) => b[1] - a[1]);
+            const ponentesGlobal = {};
+            sesionesRealizadas.forEach(s => {
+                if (s.ponente) {
+                    ponentesGlobal[s.ponente] = (ponentesGlobal[s.ponente] || 0) + 1;
+                }
+            });
+            const topGlobal = Object.entries(ponentesGlobal)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
 
-            listaPonentes.innerHTML = ponentes.map(([ponente, count]) => `
-                <li>
-                    <span class="label">${ponente}</span>
-                    <span class="value">${count}</span>
-                </li>
-            `).join('');
+            listaPonentes.innerHTML = topGlobal.length > 0
+                ? topGlobal.map(([ponente, count]) => `
+                    <li>
+                        <span class="label">${ponente}</span>
+                        <span class="value">${count}</span>
+                    </li>
+                `).join('')
+                : '<li><span class="label">Sin datos</span></li>';
+        }
+
+        // TOP-10 Plantilla (solo sesiones realizadas)
+        const listaTopPlantilla = document.getElementById('listaTopPlantilla');
+        if (listaTopPlantilla) {
+            const sesionesPlantilla = sesionesRealizadas.filter(s => s.grupo === 'Plantilla');
+            const ponentesPlantilla = {};
+            sesionesPlantilla.forEach(s => {
+                if (s.ponente) {
+                    ponentesPlantilla[s.ponente] = (ponentesPlantilla[s.ponente] || 0) + 1;
+                }
+            });
+            const topPlantilla = Object.entries(ponentesPlantilla)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            listaTopPlantilla.innerHTML = topPlantilla.length > 0
+                ? topPlantilla.map(([ponente, count]) => `
+                    <li>
+                        <span class="label">${ponente}</span>
+                        <span class="value">${count}</span>
+                    </li>
+                `).join('')
+                : '<li><span class="label">Sin datos</span></li>';
+        }
+
+        // TOP-10 FIR (solo sesiones realizadas)
+        const listaTopFIR = document.getElementById('listaTopFIR');
+        if (listaTopFIR) {
+            const sesionesFIR = sesionesRealizadas.filter(s => s.grupo === 'FIR');
+            const ponentesFIR = {};
+            sesionesFIR.forEach(s => {
+                if (s.ponente) {
+                    ponentesFIR[s.ponente] = (ponentesFIR[s.ponente] || 0) + 1;
+                }
+            });
+            const topFIR = Object.entries(ponentesFIR)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            listaTopFIR.innerHTML = topFIR.length > 0
+                ? topFIR.map(([ponente, count]) => `
+                    <li>
+                        <span class="label">${ponente}</span>
+                        <span class="value">${count}</span>
+                    </li>
+                `).join('')
+                : '<li><span class="label">Sin datos</span></li>';
         }
     } catch (error) {
         mostrarNotificacion('Error al cargar informes: ' + error.message, 'error');

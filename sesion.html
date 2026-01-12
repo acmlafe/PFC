@@ -25,16 +25,22 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="navProgramacion">
                     <a href="programacion.html">
                         <i class="fas fa-calendar-alt"></i>
                         <span>Programación</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="repositorio.html" class="active">
+                <li class="nav-item" id="navRepositorio">
+                    <a href="repositorio.html">
                         <i class="fas fa-archive"></i>
                         <span>Repositorio</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-admin-only>
+                    <a href="maestro.html">
+                        <i class="fas fa-database"></i>
+                        <span>Maestro de sesiones</span>
                     </a>
                 </li>
                 <li class="nav-item" data-admin-only>
@@ -78,8 +84,8 @@
         <main class="main-content">
             <header class="header">
                 <div>
-                    <a href="repositorio.html" style="color: var(--gray-500); text-decoration: none; font-size: 14px;">
-                        <i class="fas fa-arrow-left"></i> Volver al repositorio
+                    <a id="enlaceVolver" href="repositorio.html" style="color: var(--gray-500); text-decoration: none; font-size: 14px;">
+                        <i class="fas fa-arrow-left"></i> <span id="textoVolver">Volver al repositorio</span>
                     </a>
                     <h1 id="detTitulo" style="margin-top: 8px;">Cargando...</h1>
                 </div>
@@ -172,8 +178,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Grupo</label>
-                            <select name="grupo" class="form-control">
+                            <label>Grupo *</label>
+                            <select name="grupo" class="form-control" required>
                                 <option value="">Seleccionar...</option>
                                 <option value="FIR">FIR</option>
                                 <option value="Plantilla">Plantilla</option>
@@ -185,8 +191,9 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Estado</label>
-                            <select name="estado" class="form-control">
+                            <label>Estado *</label>
+                            <select name="estado" class="form-control" required>
+                                <option value="">Seleccionar...</option>
                                 <option value="pendiente">Pendiente</option>
                                 <option value="fecha confirmada">Fecha confirmada</option>
                                 <option value="realizada">Realizada</option>
@@ -266,6 +273,37 @@
                 Auth.aplicarPermisos();
             }
         });
+
+        // Actualizar navegación según el estado de la sesión
+        function actualizarNavegacion(estado) {
+            const enlaceVolver = document.getElementById('enlaceVolver');
+            const textoVolver = document.getElementById('textoVolver');
+            const navProgramacion = document.getElementById('navProgramacion');
+            const navRepositorio = document.getElementById('navRepositorio');
+
+            if (estado === 'realizada') {
+                // Sesión realizada -> volver a Repositorio
+                enlaceVolver.href = 'repositorio.html';
+                textoVolver.textContent = 'Volver al repositorio';
+                navRepositorio.querySelector('a').classList.add('active');
+                navProgramacion.querySelector('a').classList.remove('active');
+            } else {
+                // Sesión no realizada -> volver a Programación
+                enlaceVolver.href = 'programacion.html';
+                textoVolver.textContent = 'Volver a programación';
+                navProgramacion.querySelector('a').classList.add('active');
+                navRepositorio.querySelector('a').classList.remove('active');
+            }
+        }
+
+        // Sobrescribir cargarDetalleSesion para actualizar navegación
+        const cargarDetalleSesionOriginal = cargarDetalleSesion;
+        cargarDetalleSesion = async function() {
+            await cargarDetalleSesionOriginal();
+            if (window.sesionActual) {
+                actualizarNavegacion(window.sesionActual.estado);
+            }
+        };
 
         async function editarSesionActual() {
             if (window.sesionActual) {

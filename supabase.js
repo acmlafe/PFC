@@ -39,25 +39,27 @@ const Sesiones = {
         return data;
     },
 
-    // Obtener sesiones atrasadas (pendientes con fecha anterior a hoy)
+    // Obtener sesiones atrasadas (pendientes con fecha de exposición anterior a hoy)
     async getAtrasadas() {
         const hoy = new Date().toISOString().split('T')[0];
         const { data, error } = await db
             .from('sesiones')
             .select('*')
             .eq('estado', 'pendiente')
-            .lt('fecha_prevista', hoy)
-            .order('fecha_prevista', { ascending: true });
+            .lt('fecha_exposicion', hoy)
+            .order('fecha_exposicion', { ascending: true });
         if (error) throw error;
         return data || [];
     },
 
-    // Obtener sesiones pendientes o programadas (ordenadas por fecha de exposición)
+    // Obtener sesiones pendientes o programadas a partir de hoy (ordenadas por fecha de exposición)
     async getProximas(limite = 5) {
+        const hoy = new Date().toISOString().split('T')[0];
         const { data, error } = await db
             .from('sesiones')
             .select('*')
             .in('estado', ['pendiente', 'fecha confirmada'])
+            .gte('fecha_exposicion', hoy)
             .order('fecha_exposicion', { ascending: true, nullsFirst: false })
             .limit(limite);
         if (error) throw error;
@@ -158,11 +160,14 @@ const Sesiones = {
         if (filtros.palabras_clave) {
             query = query.ilike('palabras_clave', `%${filtros.palabras_clave}%`);
         }
+
+        // En repositorio (realizadas) filtrar por fecha_exposicion, en programación por fecha_prevista
+        const campoFecha = modoFiltro === 'realizadas' ? 'fecha_exposicion' : 'fecha_prevista';
         if (filtros.fecha_desde) {
-            query = query.gte('fecha_prevista', filtros.fecha_desde);
+            query = query.gte(campoFecha, filtros.fecha_desde);
         }
         if (filtros.fecha_hasta) {
-            query = query.lte('fecha_prevista', filtros.fecha_hasta);
+            query = query.lte(campoFecha, filtros.fecha_hasta);
         }
 
         // Orden ascendente para programadas (próximas primero), descendente para realizadas (recientes primero)

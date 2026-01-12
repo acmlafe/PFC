@@ -225,6 +225,12 @@
                     </a>
                 </li>
                 <li class="nav-item" data-admin-only>
+                    <a href="maestro.html">
+                        <i class="fas fa-database"></i>
+                        <span>Maestro de sesiones</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-admin-only>
                     <a href="usuarios.html">
                         <i class="fas fa-users"></i>
                         <span>Usuarios</span>
@@ -277,10 +283,11 @@
                         <li><a href="#dashboard">3. Dashboard (Panel de Control)</a></li>
                         <li><a href="#programacion">4. Programación de Sesiones</a></li>
                         <li><a href="#repositorio">5. Repositorio</a></li>
-                        <li><a href="#informes">6. Informes y Estadísticas</a></li>
-                        <li><a href="#usuarios">7. Gestión de Usuarios (Admin)</a></li>
-                        <li><a href="#sesiones">8. Editar y Eliminar Sesiones</a></li>
-                        <li><a href="#password">9. Cambiar Contraseña</a></li>
+                        <li><a href="#maestro">6. Maestro de Sesiones (Admin)</a></li>
+                        <li><a href="#informes">7. Informes y Estadísticas</a></li>
+                        <li><a href="#usuarios">8. Gestión de Usuarios (Admin)</a></li>
+                        <li><a href="#sesiones">9. Editar y Eliminar Sesiones</a></li>
+                        <li><a href="#password">10. Cambiar Contraseña</a></li>
                     </ul>
                 </div>
 
@@ -294,15 +301,19 @@
                     <div class="feature-grid">
                         <div class="feature-item">
                             <h4><i class="fas fa-calendar-alt"></i> Programación</h4>
-                            <p>Visualiza y gestiona las sesiones programadas en formato calendario o tabla.</p>
+                            <p>Visualiza y gestiona las sesiones programadas y no impartidas todavía.</p>
                         </div>
                         <div class="feature-item">
                             <h4><i class="fas fa-archive"></i> Repositorio</h4>
-                            <p>Consulta el histórico de sesiones ya realizadas.</p>
+                            <p>Consulta el histórico de sesiones ya impartidas.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4><i class="fas fa-database"></i> Maestro de Sesiones</h4>
+                            <p>Vista completa de todas las sesiones del sistema (solo administradores).</p>
                         </div>
                         <div class="feature-item">
                             <h4><i class="fas fa-chart-bar"></i> Informes</h4>
-                            <p>Accede a estadísticas y métricas sobre las sesiones.</p>
+                            <p>Accede a estadísticas y métricas sobre las sesiones realizadas.</p>
                         </div>
                         <div class="feature-item">
                             <h4><i class="fas fa-users"></i> Usuarios</h4>
@@ -340,11 +351,17 @@
                     <h2><i class="fas fa-home"></i> 3. Dashboard (Panel de Control)</h2>
                     <p>El Dashboard es la pantalla principal que se muestra al iniciar sesión. Proporciona una visión general del estado de las sesiones formativas.</p>
 
-                    <h3>Elementos del Dashboard</h3>
+                    <h3>Tarjetas de estadísticas</h3>
+                    <p>Las tarjetas muestran el número de sesiones en diferentes estados. Algunas son clicables para acceder directamente a más información:</p>
                     <ul>
-                        <li><strong>Tarjetas de estadísticas:</strong> Muestran el número total de sesiones, pendientes, realizadas y atrasadas.</li>
-                        <li><strong>Próximas sesiones:</strong> Lista de las sesiones programadas más cercanas en el tiempo.</li>
+                        <li><strong>Total Sesiones:</strong> Número total de sesiones en el sistema.</li>
+                        <li><strong>Realizadas:</strong> Sesiones ya impartidas. <em>Haz clic para ir al Repositorio.</em></li>
+                        <li><strong>Pendientes:</strong> Sesiones programadas pendientes de impartir. <em>Haz clic para ir a Programación.</em></li>
+                        <li><strong>Atrasadas:</strong> Sesiones pendientes cuya fecha de exposición ya ha pasado. <em>Haz clic para ver el listado de sesiones atrasadas.</em></li>
                     </ul>
+
+                    <h3>Próximas sesiones</h3>
+                    <p>Muestra las 5 próximas sesiones programadas <strong>a partir de la fecha actual</strong>. Haz clic en el título de una sesión para ver sus detalles.</p>
 
                     <h3>Código de colores en fechas</h3>
                     <div class="color-legend">
@@ -357,12 +374,16 @@
                             <span>Fecha exposición diferente a prevista</span>
                         </div>
                     </div>
+
+                    <div class="tip-box">
+                        <strong><i class="fas fa-lightbulb"></i> Nota:</strong> Las sesiones atrasadas se determinan comparando la fecha de exposición con la fecha actual.
+                    </div>
                 </section>
 
                 <!-- Programación -->
                 <section id="programacion" class="manual-section">
                     <h2><i class="fas fa-calendar-alt"></i> 4. Programación de Sesiones</h2>
-                    <p>La sección de Programación muestra todas las sesiones que están pendientes o con fecha confirmada (no incluye las ya realizadas).</p>
+                    <p>La sección de Programación muestra las <strong>sesiones programadas y no impartidas todavía</strong> (estados: pendiente, fecha confirmada o anulada).</p>
 
                     <h3>Vistas disponibles</h3>
                     <p>Puedes alternar entre dos vistas usando los botones en la parte superior:</p>
@@ -405,7 +426,7 @@
                 <!-- Repositorio -->
                 <section id="repositorio" class="manual-section">
                     <h2><i class="fas fa-archive"></i> 5. Repositorio</h2>
-                    <p>El Repositorio contiene el histórico de todas las sesiones que ya han sido <strong>realizadas</strong>.</p>
+                    <p>El Repositorio contiene el histórico de todas las <strong>sesiones impartidas</strong> (estado: realizada).</p>
 
                     <h3>Funcionalidades</h3>
                     <ul>
@@ -420,33 +441,72 @@
                         <li>Ponente</li>
                         <li>Grupo (FIR, Plantilla, Rotante externo, Otros)</li>
                         <li>Palabras clave</li>
+                        <li>Rango de fechas (basado en la <strong>fecha de exposición</strong>)</li>
+                    </ul>
+
+                    <div class="tip-box">
+                        <strong><i class="fas fa-lightbulb"></i> Nota:</strong> Al acceder al detalle de una sesión desde el Repositorio, el botón "Volver" te devolverá al Repositorio. Si accedes desde Programación, te devolverá a Programación.
+                    </div>
+                </section>
+
+                <!-- Maestro de Sesiones -->
+                <section id="maestro" class="manual-section">
+                    <h2><i class="fas fa-database"></i> 6. Maestro de Sesiones (Solo Administradores)</h2>
+                    <p>El Maestro de Sesiones es una vista completa de <strong>todas las sesiones</strong> del sistema, independientemente de su estado.</p>
+
+                    <h3>Características</h3>
+                    <ul>
+                        <li>Muestra todas las sesiones: pendientes, con fecha confirmada, realizadas y anuladas.</li>
+                        <li>Incluye filtro por estado, además de todos los filtros disponibles en el Repositorio.</li>
+                        <li>Solo accesible para usuarios con perfil de Administrador.</li>
+                    </ul>
+
+                    <h3>Filtros disponibles</h3>
+                    <ul>
+                        <li>Título</li>
+                        <li>Ponente</li>
+                        <li>Grupo (FIR, Plantilla, Rotante externo, Otros)</li>
+                        <li>Estado (Pendiente, Fecha confirmada, Realizada, Anulada)</li>
+                        <li>Palabras clave</li>
                         <li>Rango de fechas</li>
                     </ul>
+
+                    <div class="tip-box">
+                        <strong><i class="fas fa-lightbulb"></i> Uso:</strong> Esta sección es útil para tener una visión global de todas las sesiones y realizar búsquedas sin restricciones de estado.
+                    </div>
                 </section>
 
                 <!-- Informes -->
                 <section id="informes" class="manual-section">
-                    <h2><i class="fas fa-chart-bar"></i> 6. Informes y Estadísticas</h2>
+                    <h2><i class="fas fa-chart-bar"></i> 7. Informes y Estadísticas</h2>
                     <p>La sección de Informes proporciona métricas y estadísticas sobre las sesiones formativas.</p>
 
-                    <h3>Datos disponibles</h3>
+                    <h3>Resumen general</h3>
+                    <p>Tarjetas con el total de sesiones, realizadas, pendientes, anuladas y atrasadas.</p>
+
+                    <h3>Estadísticas de sesiones realizadas</h3>
                     <ul>
-                        <li><strong>Resumen general:</strong> Total de sesiones, realizadas, pendientes, anuladas y atrasadas.</li>
-                        <li><strong>Por grupo:</strong> Número de sesiones por cada grupo (FIR, Plantilla, Rotante externo, Otros).</li>
-                        <li><strong>Por ponente:</strong> Ranking de ponentes según número de sesiones.</li>
+                        <li><strong>Sesiones realizadas por Grupo:</strong> Distribución de sesiones impartidas por grupo (FIR, Plantilla, Rotante externo, Otros).</li>
+                        <li><strong>TOP-10 Ponentes (Global):</strong> Los 10 ponentes con más sesiones impartidas.</li>
+                        <li><strong>TOP-10 Ponentes (Plantilla):</strong> Los 10 ponentes de Plantilla con más sesiones impartidas.</li>
+                        <li><strong>TOP-10 Ponentes (FIR):</strong> Los 10 ponentes FIR con más sesiones impartidas.</li>
                     </ul>
 
-                    <h3>Exportar datos</h3>
+                    <h3>Indicadores filtrados</h3>
+                    <p>Permite filtrar las estadísticas por ponente, grupo y rango de fechas para obtener métricas específicas.</p>
+
+                    <h3>Exportar datos (Solo administradores)</h3>
                     <p>Puedes exportar los datos en diferentes formatos:</p>
                     <ul>
-                        <li><strong>Excel:</strong> Archivo .xlsx con todos los datos</li>
-                        <li><strong>CSV:</strong> Archivo de texto separado por comas</li>
+                        <li><strong>Backup Sesiones (CSV):</strong> Formato compatible con Supabase para restauración.</li>
+                        <li><strong>Backup Usuarios (CSV):</strong> Formato compatible con Supabase para restauración.</li>
+                        <li><strong>Informe Sesiones (Excel):</strong> Archivo .xlsx con todos los datos formateados.</li>
                     </ul>
                 </section>
 
                 <!-- Usuarios -->
                 <section id="usuarios" class="manual-section">
-                    <h2><i class="fas fa-users"></i> 7. Gestión de Usuarios (Solo Administradores)</h2>
+                    <h2><i class="fas fa-users"></i> 8. Gestión de Usuarios (Solo Administradores)</h2>
                     <p>Esta sección solo está disponible para usuarios con perfil de <strong>Administrador</strong>.</p>
 
                     <h3>Crear nuevo usuario</h3>
@@ -473,7 +533,7 @@
 
                 <!-- Editar y Eliminar Sesiones -->
                 <section id="sesiones" class="manual-section">
-                    <h2><i class="fas fa-edit"></i> 8. Editar y Eliminar Sesiones</h2>
+                    <h2><i class="fas fa-edit"></i> 9. Editar y Eliminar Sesiones</h2>
 
                     <h3>Editar una sesión</h3>
                     <p>Existen varias formas de editar una sesión:</p>
@@ -505,7 +565,7 @@
 
                 <!-- Cambiar Contraseña -->
                 <section id="password" class="manual-section">
-                    <h2><i class="fas fa-key"></i> 9. Cambiar Contraseña</h2>
+                    <h2><i class="fas fa-key"></i> 10. Cambiar Contraseña</h2>
                     <p>Puedes cambiar tu contraseña en cualquier momento.</p>
 
                     <h3>Pasos</h3>
