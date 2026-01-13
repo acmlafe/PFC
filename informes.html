@@ -377,7 +377,7 @@
                 const pendientes = sesiones.filter(s => s.estado === 'pendiente' || s.estado === 'fecha confirmada').length;
                 const anuladas = sesiones.filter(s => s.estado === 'anulada').length;
                 const atrasadas = sesiones.filter(s =>
-                    s.estado === 'pendiente' && s.fecha_prevista && s.fecha_prevista < hoy
+                    s.estado === 'pendiente' && s.fecha_exposicion && s.fecha_exposicion < hoy
                 ).length;
 
                 // Actualizar tabla

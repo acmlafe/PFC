@@ -161,8 +161,8 @@ const Sesiones = {
             query = query.ilike('palabras_clave', `%${filtros.palabras_clave}%`);
         }
 
-        // En repositorio (realizadas) filtrar por fecha_exposicion, en programación por fecha_prevista
-        const campoFecha = modoFiltro === 'realizadas' ? 'fecha_exposicion' : 'fecha_prevista';
+        // En programación filtrar por fecha_prevista, en el resto (realizadas, todas) por fecha_exposicion
+        const campoFecha = modoFiltro === 'programadas' ? 'fecha_prevista' : 'fecha_exposicion';
         if (filtros.fecha_desde) {
             query = query.gte(campoFecha, filtros.fecha_desde);
         }
